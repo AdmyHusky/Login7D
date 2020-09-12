@@ -1,14 +1,14 @@
 import axios from 'axios'
 const url = 'http://localhost:3000/api/'
 export default {
-  login (credentials) {
+  Login (credentials) {
     return axios
-      .post(url + 'login/', credentials)
+      .post(url + 'Login/', credentials)
       .then(response => response.data)
   },
-  signUp (credentials) {
+  Register (credentials) {
     return axios
-      .post(url + 'sign-up/', credentials)
+      .post(url + 'Register/', credentials)
       .then(response => response.data)
   },
   getSecretContent () {

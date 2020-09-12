@@ -36,18 +36,20 @@
       <v-col cols="12" sm="5">
         <v-row no-gutters>
           <v-card width="450" class="mx-auto" style="position: relative; top: 20px;">
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12">
-                    <v-text-field label="Email*" required v-model="emailuser"></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field label="Password*" type="password" required v-model="password"></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
+            <v-form ref="form" v-model="valid" :lazy-validation="lazy">
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field label="Email*" required v-model="emailuser"></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field label="Password*" type="password" required v-model="password"></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+            </v-form>
             <v-card-actions>
               <v-btn block color="primary" dark @click="Login">
                 <h2>เข้าสู่ระบบ</h2>
@@ -78,23 +80,31 @@ import Vue from "vue";
 
 export default Vue.extend({
   data: () => ({
-    msg:"",
+    msg: "",
     emailuser: "",
     password: "",
+    nextWeek:""
   }),
   methods: {
     async Register() {
+      var day = new Date();
+      var nextWeek = new Date(day);
+      nextWeek.setDate(day.getDate() + 7);
+      console.log(day)
+      console.log(nextWeek)
+
       if (this.$refs.form.validate()) {
         try {
           const credentials = {
             emailuser: this.emailuser,
-            password: this.password
+            password: this.password,
+            nextWeek: nextWeek.setDate(day.getDate() + 7)
           };
-          const response = await AuthService.signUp(credentials);
+          const response = await AuthService.Register(credentials);
           this.msg = response.msg;
           this.$refs.form.reset();
         } catch (error) {
-          alert((this.msg = error.response.data.msg));
+          alert((this.msg = "shit"));
         }
       }
     },
@@ -105,7 +115,7 @@ export default Vue.extend({
             emailuser: this.emailuser,
             password: this.password
           };
-          const response = await AuthService.login(credentials);
+          const response = await AuthService.Login(credentials);
           this.msg = response.msg;
           const token = response.token;
           const user = response.user;
