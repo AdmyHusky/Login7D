@@ -14,7 +14,7 @@
           <v-col cols="12" sm="4">
             <h1>LOGIN7D</h1>
             <h4>คลิกรูปภาพหรือเพิ่มบัญชี</h4>
-            <button @click="Register">
+            <button @click="showRegister">
               <span>
                 <v-card width="256" class="mx-auto" style="position: relative; top: 20px;">
                   <v-img class="white--text align-end d-flex align-center" height="200px">
@@ -35,38 +35,7 @@
       <!-- LOGIN FROM -->
       <v-col cols="12" sm="5">
         <v-row no-gutters>
-          <v-card width="450" class="mx-auto" style="position: relative; top: 20px;">
-            <v-form ref="form" v-model="valid" :lazy-validation="lazy">
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field label="Email*" required v-model="emailuser"></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field label="Password*" type="password" required v-model="password"></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-            </v-form>
-            <v-card-actions>
-              <v-btn block color="primary" dark @click="Login">
-                <h2>เข้าสู่ระบบ</h2>
-              </v-btn>
-            </v-card-actions>
-            <br />
-            <hr />
-            <br />
-            <v-card-actions>
-              <v-col cols="12" class="text-center">
-                <v-btn large color="success" dark @click="Register">
-                  <h3>สมัครบัญชีใหม่</h3>
-                </v-btn>
-              </v-col>
-            </v-card-actions>
-            <br />
-          </v-card>
+        <FromLogin></FromLogin>
         </v-row>
       </v-col>
     </v-row>
@@ -75,58 +44,26 @@
 
 <script>
 // @ is an alias to /src
-import AuthService from "@/services/AuthService.js";
+//import AuthService from "@/services/AuthService.js";
+import FromLogin from "@/components/FromLogin.vue"
 import Vue from "vue";
 
 export default Vue.extend({
+  components: {
+    FromLogin
+  },
   data: () => ({
-    msg: "",
+      msg: "",
     emailuser: "",
     password: "",
-    nextWeek:""
+    //emailuser_register: "",
+    //password_register: "",
+    showRegister: false,
+    date: new Date().toISOString().substr(0, 10),
+    menu: false,
   }),
   methods: {
-    async Register() {
-      var day = new Date();
-      var nextWeek = new Date(day);
-      nextWeek.setDate(day.getDate() + 7);
-      console.log(day)
-      console.log(nextWeek)
-
-      if (this.$refs.form.validate()) {
-        try {
-          const credentials = {
-            emailuser: this.emailuser,
-            password: this.password,
-            nextWeek: nextWeek.setDate(day.getDate() + 7)
-          };
-          const response = await AuthService.Register(credentials);
-          this.msg = response.msg;
-          this.$refs.form.reset();
-        } catch (error) {
-          alert((this.msg = "shit"));
-        }
-      }
-    },
-    async Login() {
-      if (this.$refs.form.validate()) {
-        try {
-          const credentials = {
-            emailuser: this.emailuser,
-            password: this.password
-          };
-          const response = await AuthService.Login(credentials);
-          this.msg = response.msg;
-          const token = response.token;
-          const user = response.user;
-          this.$store.dispatch("login", { token, user });
-        } catch (error) {
-          alert((this.msg = error.response.data.msg));
-          //this.snackbar = true
-          //this.msg = error.response.data.msg;
-        }
-      }
-    }
+    
   }
 });
 </script>

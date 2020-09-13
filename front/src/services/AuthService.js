@@ -2,6 +2,7 @@ import axios from 'axios'
 const url = 'http://localhost:3000/api/'
 export default {
   Login (credentials) {
+    console.log(credentials)
     return axios
       .post(url + 'Login/', credentials)
       .then(response => response.data)
