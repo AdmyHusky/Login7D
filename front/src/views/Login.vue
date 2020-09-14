@@ -141,21 +141,30 @@ li span {
   font-size: 4.5rem;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* general styling */
-html,
-body {
+html, body {
   height: 100%;
   margin: 0;
-  
 }
+
 
 .container {
   color: #333;
   margin: 0 auto;
   padding: 0.5rem;
   text-align: center;
-  
 }
 </style>
-
-

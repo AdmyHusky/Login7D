@@ -64,3 +64,9 @@ export default Vue.extend({
   }
 });
 </script>
+<style scoped>
+.bg {
+  background-color: #78909c;
+  
+}
+</style>

@@ -8,7 +8,15 @@
               <v-text-field label="Email*" required v-model="emailuser_login"></v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-text-field label="Password*" type="password" required v-model="password_login" ></v-text-field>
+              <v-text-field
+                label="Password*"
+                required
+                v-model="password_login"
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="[rules.required, rules.min]"
+                :type="show1 ? 'text' : 'password'"
+                @click:append="show1 = !show1"
+              ></v-text-field>
             </v-col>
           </v-row>
         </v-container>
@@ -45,20 +53,17 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12">
-                      <v-text-field
-                        :rules="emailRules"
-                        v-model="emailuser"
-                        label="Email*"
-                        required
-                      ></v-text-field>
+                      <v-text-field :rules="emailRules" v-model="emailuser" label="Email*" required></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
                         label="Password*"
-                        v-model="password"
-                        :rules="passwordRules"
-                        type="password"
                         required
+                        v-model="password"
+                        :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                        :rules2="[rules.required, rules.min]"
+                        :type="show2 ? 'text' : 'password'"
+                        @click:append="show2 = !show2"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6">
@@ -119,20 +124,30 @@ export default {
     showRegister: false,
     date: new Date(),
     menu: false,
-    expiration:"",
+    expiration: "",
+    show1: false,
+    show2: false,
     passwordRules: [
       v => !!v || "Password is required",
-      v =>
-        v.length > 7 || "Password must be more than 7 and "
+      v => v.length > 7 || "Password must be more than 7 and "
     ],
     emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-      ],
+      v => !!v || "E-mail is required",
+      v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+    ],
+    rules: {
+      required: value => !!value || "Required.",
+      emailMatch: () => "The email and password you entered don't match"
+    },
+    rules2: {
+      required: value => !!value || "Required.",
+      min: v => v.length >= 7 || 'Min 7 characters',
+      emailMatch: () => "The email and password you entered don't match"
+    },
   }),
   methods: {
-    changeLocale () {
-      this.$vuetify.lang.current = 'th'
+    changeLocale() {
+      this.$vuetify.lang.current = "th";
     },
     close() {
       this.showRegister = false;
@@ -140,8 +155,8 @@ export default {
       this.password_register = "";
     },
     async Register() {
-       var nextWeek = new Date(this.date);
-       nextWeek.setDate(this.date.getDate() + 7);
+      var nextWeek = new Date(this.date);
+      nextWeek.setDate(this.date.getDate() + 7);
       if (this.$refs.form.validate()) {
         try {
           const credentials = {
@@ -176,24 +191,23 @@ export default {
         this.expiration = this.$store.getters.getUser.expiration;
         var dateParts = this.expiration.split("-");
         var jsDate = new Date(
-        dateParts[0],
-        dateParts[1] - 1,
-        dateParts[2].substr(0, 2)
+          dateParts[0],
+          dateParts[1] - 1,
+          dateParts[2].substr(0, 2)
         );
         var time = jsDate - this.date;
-        if(time<=0){
-          alert((this.msg = "Email expiration at "+jsDate));
-        }
-        else{
+        if (time <= 0) {
+          alert((this.msg = "Email expiration at " + jsDate));
+        } else {
           this.$router.push("/login");
-          }
+        }
       } catch (error) {
         alert((this.msg = error.response.data.msg));
         //this.snackbar = true
         //this.msg = error.response.data.msg;
       }
     }
-  },
+  }
 };
 </script>
 
