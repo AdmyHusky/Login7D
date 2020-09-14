@@ -29,8 +29,20 @@
             </v-card-actions>
           </v-card-title>
           <v-card-text class="headline font-weight-bold text-center">Expiration date</v-card-text>
-          <v-card-text class="headline font-weight-bold text-center">{{this.userexpiration}}</v-card-text>
-          <p id="demo"></p>
+          <ul>
+            <li>
+              <span id="days"></span>days
+            </li>
+            <li>
+              <span id="hours"></span>Hours
+            </li>
+            <li>
+              <span id="minutes"></span>Minutes
+            </li>
+            <li>
+              <span id="seconds"></span>Seconds
+            </li>
+          </ul>
           <br />
           <div class="my-2 text-center">
             <v-btn v-on="on" large color="error" dark @click="logout">
@@ -56,7 +68,12 @@ export default Vue.extend({
     useremail: "",
     userexpiration: "",
     time: "",
-    now: new Date()
+    now: new Date(),
+    days: "",
+    hours: "",
+    minutes: "",
+    seconds: "",
+    jsDate: ""
   }),
   async created() {
     if (!this.$store.getters.isLoggedIn) {
@@ -64,37 +81,81 @@ export default Vue.extend({
     }
     this.useremail = this.$store.getters.getUser.email;
     this.userexpiration = this.$store.getters.getUser.expiration;
-    //mysql date -> from obj javascript
-
-    //var dateParts = this.userexpiration.split("-");
-    //var jsDate = new Date(
-      //dateParts[0],
-      //dateParts[1] - 1,
-      //dateParts[2].substr(0, 2)
-    //);
-    //console.log(this.userexpiration)
-    //this.userexpiration = jsDate.toISOString().substr(0, 10);
-    //console.log(jsDate.toISOString().substr(0, 10))
-    //this.time = jsDate - this.now;
-
-    //var days = Math.floor(this.time / (1000 * 60 * 60 * 24));
-    //var hours = Math.floor(
-      //(this.time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    //);
-    //var minutes = Math.floor((this.time % (1000 * 60 * 60)) / (1000 * 60));
-    //var seconds = Math.floor((this.time % (1000 * 60)) / 1000);
-    //console.log(days);
-    //console.log(hours);
-    //console.log(minutes);
-    //console.log(seconds);
+    var dateParts = this.userexpiration.split("-");
+    this.jsDate = new Date(
+      dateParts[0],
+      dateParts[1] - 1,
+      dateParts[2].substr(0, 2)
+    );
+    this.jsDate = this.jsDate.getTime();
+    this.delay(this.jsDate);
   },
-
   methods: {
     logout() {
       this.$store.dispatch("logout");
       this.$router.push("/");
+    },
+    delay(jsDate) {
+      //mysql date -> from obj javascript
+      setInterval(function() {
+        let now = new Date().getTime();
+        this.time = jsDate - now;
+        document.getElementById("days").innerText = Math.floor(
+          this.time / (1000 * 60 * 60 * 24)
+        );
+        document.getElementById("hours").innerText = Math.floor(
+          (this.time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        document.getElementById("minutes").innerText = Math.floor(
+          (this.time % (1000 * 60 * 60)) / (1000 * 60)
+        );
+        document.getElementById("seconds").innerText = Math.floor(
+          (this.time % (1000 * 60)) / 1000
+        );
+      }, 1000);
     }
-  },
+  }
 });
 </script>
+<style >
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-weight: normal;
+}
+
+li {
+  display: inline-block;
+  font-size: 1.5em;
+  list-style-type: none;
+  padding: 1em;
+  text-transform: uppercase;
+}
+
+li span {
+  display: block;
+  font-size: 4.5rem;
+}
+
+/* general styling */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  
+}
+
+.container {
+  color: #333;
+  margin: 0 auto;
+  padding: 0.5rem;
+  text-align: center;
+  
+}
+</style>
+
 

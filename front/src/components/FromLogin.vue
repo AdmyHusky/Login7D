@@ -182,7 +182,7 @@ export default {
         );
         var time = jsDate - this.date;
         if(time<=0){
-          alert((this.msg = "Email expiration"));
+          alert((this.msg = "Email expiration at "+jsDate));
         }
         else{
           this.$router.push("/login");
