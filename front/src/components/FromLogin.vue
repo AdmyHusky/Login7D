@@ -143,7 +143,7 @@ export default {
           this.emailuser = "";
           this.password = "";
         } catch (error) {
-          alert((this.msg = "shit"));
+          alert((this.msg = "Error"));
         }
       }
     },
@@ -159,8 +159,8 @@ export default {
         this.password = "";
         const token = response.token;
         const user = response.user;
-        this.$store.dispatch("Login", { token, user });
-        this.$router.push("/Login");
+        this.$store.dispatch("login", { token, user });
+        this.$router.push("/login");
       } catch (error) {
         alert((this.msg = error.response.data.msg));
         //this.snackbar = true
