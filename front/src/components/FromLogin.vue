@@ -5,10 +5,10 @@
         <v-container>
           <v-row>
             <v-col cols="12">
-              <v-text-field label="Email*" required v-model="emailuser"></v-text-field>
+              <v-text-field label="Email*" required v-model="emailuser_login"></v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-text-field label="Password*" type="password" required v-model="password"></v-text-field>
+              <v-text-field label="Password*" type="password" required v-model="password_login" ></v-text-field>
             </v-col>
           </v-row>
         </v-container>
@@ -113,10 +113,22 @@ export default {
   data: () => ({
     msg: "",
     emailuser: "",
+    emailuser_login: "",
     password: "",
+    password_login: "",
     showRegister: false,
     date: new Date(),
     menu: false,
+    expiration:"",
+    passwordRules: [
+      v => !!v || "Password is required",
+      v =>
+        v.length > 7 || "Password must be more than 7 and "
+    ],
+    emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ],
   }),
   methods: {
     changeLocale () {
@@ -150,17 +162,31 @@ export default {
     async Login() {
       try {
         const credentials = {
-          emailuser: this.emailuser,
-          password: this.password
+          emailuser: this.emailuser_login,
+          password: this.password_login
         };
         const response = await AuthService.Login(credentials);
         this.msg = response.msg;
-        this.emailuser = "";
-        this.password = "";
+        this.emailuser_login = "";
+        this.password_login = "";
         const token = response.token;
         const user = response.user;
         this.$store.dispatch("login", { token, user });
-        this.$router.push("/login");
+        //check time
+        this.expiration = this.$store.getters.getUser.expiration;
+        var dateParts = this.expiration.split("-");
+        var jsDate = new Date(
+        dateParts[0],
+        dateParts[1] - 1,
+        dateParts[2].substr(0, 2)
+        );
+        var time = jsDate - this.date;
+        if(time<=0){
+          alert((this.msg = "Error"));
+        }
+        else{
+          this.$router.push("/login");
+          }
       } catch (error) {
         alert((this.msg = error.response.data.msg));
         //this.snackbar = true

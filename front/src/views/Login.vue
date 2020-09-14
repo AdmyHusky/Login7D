@@ -66,13 +66,14 @@ export default Vue.extend({
     this.userexpiration = this.$store.getters.getUser.expiration;
     //mysql date -> from obj javascript
 
-    var dateParts = this.userexpiration.split("-");
-    var jsDate = new Date(
-      dateParts[0],
-      dateParts[1] - 1,
-      dateParts[2].substr(0, 2)
-    );
-    this.userexpiration = jsDate.toISOString().substr(0, 10);
+    //var dateParts = this.userexpiration.split("-");
+    //var jsDate = new Date(
+      //dateParts[0],
+      //dateParts[1] - 1,
+      //dateParts[2].substr(0, 2)
+    //);
+    //console.log(this.userexpiration)
+    //this.userexpiration = jsDate.toISOString().substr(0, 10);
     //console.log(jsDate.toISOString().substr(0, 10))
     //this.time = jsDate - this.now;
 

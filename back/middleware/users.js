@@ -2,7 +2,11 @@ const express = require('express');
 module.exports = {
   validateRegister: (req, res, next) => {
     // password min 7 chars
-
+    if (!req.body.password || req.body.password.length <= 7) {
+      return res.status(400).send({
+        msg: 'Please enter a password with min. 7 chars'
+      });
+    }
     next();
   },
   isLoggedIn: (req, res, next) => {
