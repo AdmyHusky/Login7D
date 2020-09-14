@@ -44,7 +44,6 @@
 
 <script>
 // @ is an alias to /src
-//import AuthService from "@/services/AuthService.js";
 import FromLogin from "@/components/FromLogin.vue"
 import Vue from "vue";
 
@@ -56,8 +55,6 @@ export default Vue.extend({
       msg: "",
     emailuser: "",
     password: "",
-    //emailuser_register: "",
-    //password_register: "",
     showRegister: false,
     date: new Date().toISOString().substr(0, 10),
     menu: false,

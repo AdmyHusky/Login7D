@@ -114,8 +114,6 @@ export default {
     msg: "",
     emailuser: "",
     password: "",
-    //emailuser_register: "",
-    //password_register: "",
     showRegister: false,
     date: new Date(),
     menu: false,
@@ -159,9 +157,10 @@ export default {
         this.msg = response.msg;
         this.emailuser = "";
         this.password = "";
-        //const token = response.token;
-        //const user = response.user;
-        //this.$store.dispatch("login", { token, user });
+        const token = response.token;
+        const user = response.user;
+        this.$store.dispatch("Login", { token, user });
+        this.$router.push("/Login");
       } catch (error) {
         alert((this.msg = error.response.data.msg));
         //this.snackbar = true
